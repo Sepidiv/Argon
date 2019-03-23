@@ -17,7 +17,7 @@ addSub () { #TODO complete this part. adding a sub to a class/subclass
 }
 while [ '$1' != '' ] ; do
 	case $1 in
-		-f | --file-name )		shift
+		-f | --file-name )	shift
 					fileName=$1
 					;;
 		-a | --action )		shift
