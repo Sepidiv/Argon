@@ -13,7 +13,8 @@ findPlace () {
 	exit
 }
 
-addClass () { #TODO complete this part. add class to main db. wont't be that hard
+addClass () {
+	echo -ne "($1\n)\n" >> "$fileName"
 	exit
 }
 
@@ -22,7 +23,6 @@ addItem () { #TODO complete this part. add an item to a sub. //class must not co
 }
 
 addSub () { #TODO complete this part. adding a sub to a class/subclass
-
 	exit
 }
 while [ '$1' != '' ] ; do
@@ -44,7 +44,8 @@ while [ '$1' != '' ] ; do
 						item )		shift
 								addItem $1
 								;;
-					esac	
+					esac
+					;;	
 		-w | --find-place )	shift
 					findPlace $1
 					;;
