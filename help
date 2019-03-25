@@ -1,0 +1,7 @@
+Argon usage:
+-f 	--file-name 	to declare file name
+-p 	--place 	specity place of item/sub
+-a 	--add 		to add 'item' , 'sub' or 'class'
+-w 	--find-place 	get path to an item
+-h 	--help 		show this help and exit
+to report any bug/issue [or to contribute and/or support] , visit http://github.com/Sepidiv/Argon
