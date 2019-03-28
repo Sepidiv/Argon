@@ -1,33 +1,52 @@
 #!/bin/bash
 # Argon, 3rd try
-
-phrase() {
-	indentCount=$(echo "$1" | sed 's/.[=>]/\n/g' | grep --count '>')
+phrase() { #TODO complete phraser
+	lastPart=$(echo $1 | sed 's/=>/\n/g' | tail -n 1)
+	indentCount=$(cat $fileName | grep $lastPart | sed 's/\t/\n/g' | wc -l)
+	echo $1 | sed 's/=>/\n/g' > ptmp
+	sed -i '$d' ptmp
+	arrOfOthers=$(cat ptmp)
+	rm ptmp
 }
-findPlace () {
+findPlace () { #DONE
 	lineNumber="$(cat $fileName | grep $1 --line-number | sed 's/ *:.*//')"
-	echo $(cat $fileName | head -n $lineNumber | sed 's/\t//g' | grep --basic-regexp '^(\|^)' | sed 's/(//g') | sed 's/ /\n/g' > tmp
-	sed -i "$(($(cat tmp | grep ')' --line-number | sed 's/ *:.*//') - 1))d" tmp
-	sed -i 's/)//g' tmp
-	sed -i '/^$/d' tmp
-	echo "$(echo $(cat tmp) | sed 's/ /=>/g')=>$1"
-	rm tmp
+	echo $(cat $fileName | head -n $lineNumber | sed 's/\t//g' | grep --basic-regexp '^(\|^)' | sed 's/(//g') | sed 's/ /\n/g' > ftmp
+	sed -i "$(($(cat ftmp | grep ')' --line-number | sed 's/ *:.*//') - 1))d" ftmp
+	sed -i 's/)//g' ftmp
+	sed -i '/^$/d' ftmp
+	echo "$(echo $(cat ftmp) | sed 's/ /=>/g')=>$1"
+	rm ftmp
 	exit
 }
 
-addClass () {
+addClass () { #DONE
 	echo -ne "($1\n)\n" >> "$fileName"
 	exit
 }
 
-addItem () { #TODO complete this part. add an item to a sub. //class must not contain any item, but it wont be an exception here.
+addItem () { #TODO complete this part. add an item to a sub. //class must not contain any item directly, but it won't be an exception here.
 	phrase $theAddres
+	if [ $(for i in $arrOfOthers; do grep $fileName -e $i ; done | wc -l) = $(echo $arrOfOthers | sed 's/ /\n/g' | wc -l) ]; then
+		echo -n "\\" > itmp
+		echo "$(for i in $arrOfOthers; do echo -n "\t"; done)$lastPart" >> itmp;
+		lineNumber=$(($(cat $fileName | grep -e $(echo $arrOfOthers | tr " " "\n" | tail -n 1) --line-number | sed 's/ *:.*//') + 1))
+		sed -i "${lineNumber}i$(cat itmp)" $fileName
+		rm itmp
+	else
+		echo "noo"
+	fi	
 	exit
 }
 
 addSub () { #TODO complete this part. adding a sub to a class/subclass
 	exit
 }
+
+if [ "$1" = '' ]; then
+	echo "try using -h or --help"
+	exit
+fi
+
 while [ '$1' != '' ] ; do
 	case $1 in
 		-f | --file-name )	shift
@@ -39,7 +58,7 @@ while [ '$1' != '' ] ; do
 		-a | --add ) 		shift
 					case $1 in
 						sub )		shift
-								addSub $1
+								addItem "($1\n)"
 								;;
 						class )		shift
 								addClass $1
