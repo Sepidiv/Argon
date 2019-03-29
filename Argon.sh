@@ -1,6 +1,6 @@
 #!/bin/bash
 # Argon, 3rd try
-phrase() { #TODO complete phraser
+phrase() { # almost #DONE
 	lastPart=$(echo $1 | sed 's/=>/\n/g' | tail -n 1)
 	indentCount=$(cat $fileName | grep $lastPart | sed 's/\t/\n/g' | wc -l)
 	echo $1 | sed 's/=>/\n/g' > ptmp
@@ -18,30 +18,39 @@ findPlace () { #DONE
 	rm ftmp
 	exit
 }
-
 addClass () { #DONE
 	echo -ne "($1\n)\n" >> "$fileName"
 	exit
 }
-
-addItem () { #TODO complete this part. add an item to a sub. //class must not contain any item directly, but it won't be an exception here.
+addItem () { #DONE //class must not contain any item directly, but it won't be an exception here.
 	phrase $theAddres
 	if [ $(for i in $arrOfOthers; do grep $fileName -e $i ; done | wc -l) = $(echo $arrOfOthers | sed 's/ /\n/g' | wc -l) ]; then
 		echo -n "\\" > itmp
-		echo "$(for i in $arrOfOthers; do echo -n "\t"; done)$lastPart" >> itmp;
+		echo "$(for i in $arrOfOthers; do echo -n "\t"; done)$1" >> itmp;
 		lineNumber=$(($(cat $fileName | grep -e $(echo $arrOfOthers | tr " " "\n" | tail -n 1) --line-number | sed 's/ *:.*//') + 1))
 		sed -i "${lineNumber}i$(cat itmp)" $fileName
 		rm itmp
 	else
 		echo "noo"
-	fi	
+	fi
 	exit
 }
-
 addSub () { #TODO complete this part. adding a sub to a class/subclass
+	phrase $theAddres
+	if [ $(for i in $arrOfOthers; do grep $fileName -e $i ; done | wc -l) = $(echo $arrOfOthers | sed 's/ /\n/g' | wc -l) ]; then
+		echo -n "\\" > itmp
+		echo -n "$(for i in $arrOfOthers; do echo -n "\t"; done)\($1" >> itmp;
+		echo -n '\n' >> itmp;
+		echo -n "$(for i in $arrOfOthers; do echo -n "\t"; done)\)" >> itmp;
+		lineNumber=$(($(cat $fileName | grep -e $(echo $arrOfOthers | tr " " "\n" | tail -n 1) --line-number | sed 's/ *:.*//') + 1))
+		sed -i "${lineNumber}i$(cat itmp)" $fileName
+		rm itmp
+	else
+		echo "noo"
+	fi
+	exit
 	exit
 }
-
 if [ "$1" = '' ]; then
 	echo "try using -h or --help"
 	exit
@@ -58,7 +67,7 @@ while [ '$1' != '' ] ; do
 		-a | --add ) 		shift
 					case $1 in
 						sub )		shift
-								addItem "($1\n)"
+								addSub $1
 								;;
 						class )		shift
 								addClass $1
