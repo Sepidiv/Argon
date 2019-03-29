@@ -1,6 +1,7 @@
 Sepidiv Argon
 ======
-used for hierarchical data storing [\n]
+used for hierarchical data storing
+
 === Usage ===
 ------
 * `-a | --add [class,sub,item]`
@@ -15,16 +16,21 @@ used for hierarchical data storing [\n]
 ··· declare file name
 * `-h | --help`
 ··· show a simple help
+
 === ISSUES ===
 ------
 * name of two 'things' can not be a substr
 * code is spagetti -- which ain't a bug
 * sometimes, findPlace produces garbage
 * place can not be declared without quotation marks
+
 === CONTRIBUTE ===
 ------
 :/
 pull requests are welcome.
+
 === INSTALLATION ===
 ------
 All dependencies are included in coreutils and binutils --- i suppose ---
+
+JUST CLONE IT!
