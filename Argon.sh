@@ -1,5 +1,6 @@
 #!/bin/bash
 # Argon, 3rd try
+# this code is self Documented!
 phrase() { # almost #DONE
 	lastPart=$(echo $1 | sed 's/=>/\n/g' | tail -n 1)
 	indentCount=$(cat $fileName | grep $lastPart | sed 's/\t/\n/g' | wc -l)
@@ -31,7 +32,7 @@ addItem () { #DONE //class must not contain any item directly, but it won't be a
 	fi
 	exit
 }
-addSub () { #TODO complete this part. adding a sub to a class/subclass
+addSub () { #DONE
 	phrase $theAddres
 	if [ $(for i in $arrOfOthers; do grep $fileName -e $i ; done | wc -l) = $(echo $arrOfOthers | sed 's/ /\n/g' | wc -l) ]; then
 		echo -n "\\" > itmp
@@ -47,6 +48,21 @@ addSub () { #TODO complete this part. adding a sub to a class/subclass
 	exit
 	exit
 }
+removeClass () { #DONE
+	 sed -i "/^\[$1/,/^\]/d" $fileName
+	 exit
+}
+removeSub () { #DONE
+	for i in $(seq 1 $(grep "($1" "$fileName" | awk '{print gsub(/\t/,"")}')); do
+		indCount="${indCount}\t";
+	done
+	sed -i "/^${indCount}($1/,/^${indCount})/d" $fileName
+	exit
+}
+removeItem () { #DONE
+	 sed -i "/$1/d" $fileName
+	 exit
+}
 if [ "$1" = '' ]; then
 	echo "try using -h or --help"
 	exit
@@ -55,30 +71,43 @@ fi
 while [ '$1' != '' ] ; do
 	case $1 in
 		-f | --file-name )	shift
-					fileName=$1
-					;;
+							fileName=$1
+							;;
 		-p | --place )		shift
-					theAddres=$1
-					;;
+							theAddres=$1
+							;;
 		-a | --add ) 		shift
-					case $1 in
-						sub )		shift
-								addSub $1
-								;;
-						class )		shift
-								addClass $1
-								;;
-						item )		shift
-								addItem $1
-								;;
-					esac
-					;;	
+							case $1 in
+								sub )		shift
+											addSub $1
+											;;
+								class )		shift
+											addClass $1
+											;;
+								item )		shift
+											addItem $1
+											;;
+							esac
+							;;	
 		-w | --find-place )	shift
-					findPlace $1
-					;;
+							findPlace $1
+							;;
+		-r | --remove )		shift
+							case $1 in
+								sub )		shift
+											removeSub $1
+											;;
+								class )		shift
+											removeClass $1
+											;;
+								item )		shift
+											removeItem $1
+											;;
+							esac
+							;;
 		-h | --help )		cat help
-					exit
-					;;
+							exit
+							;;
 	esac
 	shift
 done
