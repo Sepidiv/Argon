@@ -1,6 +1,6 @@
 Sepidiv Argon
 ======
-used for hierarchical data storing <\br>
+used for hierarchical data storing [\n]
 === Usage ===
 ------
 * `-a | --add [class,sub,item]`
