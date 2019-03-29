@@ -10,16 +10,12 @@ phrase() { # almost #DONE
 }
 findPlace () { #DONE
 	lineNumber="$(cat $fileName | grep $1 --line-number | sed 's/ *:.*//')"
-	echo $(cat $fileName | head -n $lineNumber | sed 's/\t//g' | grep --basic-regexp '^(\|^)' | sed 's/(//g') | sed 's/ /\n/g' > ftmp
-	sed -i "$(($(cat ftmp | grep ')' --line-number | sed 's/ *:.*//') - 1))d" ftmp
-	sed -i 's/)//g' ftmp
-	sed -i '/^$/d' ftmp
-	echo "$(echo $(cat ftmp) | sed 's/ /=>/g')=>$1"
-	rm ftmp
+	arrOth=$(echo $(cat $fileName | head -n $lineNumber | sed 's/\t//g') | sed 's/ (.*)\|\[.*\]//g' | sed 's/ /\n/g'| sed "/(\|\[/! s/.*//g" | sed '/^$/d')
+	echo $(echo "$arrOth $1") | sed 's/\n/ /g' |sed 's/(\|\[//g' | sed "s/ /=>/g" 
 	exit
 }
 addClass () { #DONE
-	echo -ne "($1\n)\n" >> "$fileName"
+	echo -ne "[$1\n]\n" >> "$fileName"
 	exit
 }
 addItem () { #DONE //class must not contain any item directly, but it won't be an exception here.
