@@ -105,7 +105,7 @@ while [ '$1' != '' ] ; do
 											;;
 							esac
 							;;
-		-h | --help )		cat help
+		-h | --help )				$(cat ~/.SepiDiv)help
 							exit
 							;;
 	esac
