@@ -12,7 +12,8 @@ phrase() { # almost #DONE
 findPlace () { #DONE
 	lineNumber="$(cat $fileName | grep $1 --line-number | sed 's/ *:.*//')"
 	echo $(cat $fileName | head -n $lineNumber) | sed 's/\[.*\]//g' | sed -E 's/\(([^()]*)\)//g' | sed 's/ /\n/g'| sed '/^\[\|^(/!d' > ftmp
-	echo $(echo "$(cat ftmp) $1") | sed 's/(\|\[//g' | sed "s/ /=>/g" 
+	echo $(echo "$(cat ftmp) $1") | sed 's/(\|\[//g' | sed "s/ /=>/g"
+	rm ftmp
 	exit
 }
 addClass () { #DONE
